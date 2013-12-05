@@ -11,7 +11,7 @@ class EventsController < ApplicationController
 	def add
 		# COORDINATE PARSING ================================================================
     		if params[:address].present?
-      			coord=Geocoder.coordinates(params[:address])
+      			coord=Geocoder.search(params[:address])
     		else
 	 		redirect_to "/events/new"
     		end      
@@ -26,7 +26,7 @@ class EventsController < ApplicationController
 
   		#execute search
   		search = client.search(" ", 
-  			:geocode => "37.781157,-122.398720,1mi", 
+  			:geocode => "coord[0].latitude,coord[0].longitude,1mi", 
   			:lang => "en", 
   			:count => 5, 
   			:result_type => "recent")
