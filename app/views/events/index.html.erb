@@ -1,0 +1,19 @@
+<h1>Events</h1>
+ 
+<table>
+  <tr>
+    <th>Title</th>
+    <th>Text</th>
+    <th>Date</th>
+    <th>Location</th>
+  </tr>
+ 
+  <% @events.each do |event| %>
+    <tr>
+      <td><%= event.title %></td>
+      <td><%= event.text %></td>
+      <td><%= event.date %></td>
+      <td><%= event.location_id %></td>
+    </tr>
+  <% end %>
+</table>

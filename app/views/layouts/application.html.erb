@@ -7,8 +7,21 @@
   <%= csrf_meta_tag %>
 </head>
 <body>
+<div class="header">
+<ul class="navigation">
+	<li id="logo"><a href="#"><img src="#" alt="Tweeporter Logo"></a></li>
+	<li id="create"><a href="#"><img src="#" alt="add new event"></a></li>
+	<li><a href="#">North America</a></li>
+	<li><a href="#">Europe</a></li>
+	<li><a href="#">Asia</a></li>
+</ul>
+<p>
+search bar
+</p>
+</div>
+<div style="clear:both;">
 
 <%= yield %>
-
+</div>
 </body>
 </html>

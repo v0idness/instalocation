@@ -1,0 +1,12 @@
+<h1>Create event here</h1>
+list of events by tweets: title: location, followed by list of tweets<br>
+selection of an event (radio button)<br>
+form for entering title, text to the event
+
+<%= form_for :event, url: events_path do |f| %>
+	radio button list 
+ 
+  <p>
+    <%= f.submit %>
+  </p>
+<% end %>
