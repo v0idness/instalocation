@@ -38,6 +38,7 @@ GEM
       abstract (>= 1.0.0)
     faraday (0.8.8)
       multipart-post (~> 1.2.0)
+    geocoder (1.1.8)
     http (0.5.0)
       http_parser.rb
     http_parser.rb (0.5.3)
@@ -98,6 +99,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  geocoder
   rails (= 3.0.3)
   rake (= 0.8.7)
   sqlite3-ruby

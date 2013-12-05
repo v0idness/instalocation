@@ -12,8 +12,12 @@ class EventsController < ApplicationController
 
 	def add
 		# COORDINATE PARSING ================================================================
-
-
+    		if params[:address].present?
+      			coord=Geocoder.search(params[:address])
+    		else
+	 		redirect_to "/events/new"
+    		end      
+        
 		#get a Twitter connection object
   		client = Twitter::REST::Client.new do |config| 
   			config.consumer_key        = "93jNZ8LOHFDlqUs3z5PvEg"; 
@@ -24,7 +28,7 @@ class EventsController < ApplicationController
 
   		#execute search
   		search = client.search(" ", 
-  			:geocode => "37.781157,-122.398720,1mi", 
+  			:geocode => "coord[0].latitude,coord[0].longitude,1mi", 
   			:lang => "en", 
   			:count => 1000, 
   			:result_type => "recent")
