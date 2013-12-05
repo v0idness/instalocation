@@ -1,4 +1,6 @@
 class EventsController < ApplicationController
+	helper_method :groupedtweets
+
 	def index
     	#Get the events from the model; order by 'date' descending
     	@events = Event.order("date desc")    
@@ -10,6 +12,7 @@ class EventsController < ApplicationController
 
 	def add
 		# COORDINATE PARSING ================================================================
+
 
 		#get a Twitter connection object
   		client = Twitter::REST::Client.new do |config| 
@@ -23,12 +26,12 @@ class EventsController < ApplicationController
   		search = client.search(" ", 
   			:geocode => "37.781157,-122.398720,1mi", 
   			:lang => "en", 
-  			:count => 5, 
+  			:count => 1000, 
   			:result_type => "recent")
 
   		# list of the locations appearing in all the retrieved tweets
   		t_locations = Array.new
-  		search.collect do |tweet|
+  		search.each do |tweet|
   			if tweet.place? then
   				t_locations << tweet.place.full_name
   				t_locations = t_locations.uniq
@@ -36,23 +39,28 @@ class EventsController < ApplicationController
     	end
 
     	# array of tweet object arrays for each location
-    	groupedtweets = Array.new
-    	t_locations.collect do |loc|
+    	@groupedtweets = Array.new
+    	t_locations.each do |loc|
     		group = Array.new
-    		search.collect do |t|
+    		search.each do |t|
     			if t.place.full_name == loc then
     				group << t
     			end
     		end
-    		groupedtweets << group
+    		# add only if there are XXX tweets for a location
+    		if group.count > 10 then
+	    		@groupedtweets << group
+	    	end
     	end
+
+    	@groupedtweets = @groupedtweets.sort {|x,y| y.count <=> x.count}
 
 	end
 
 	def create
 		render text: params[:event].inspect
 		#@event = Event.new(event_params)
-  		#@event.save
+  		@event.save
   		#redirect_to @event
 	end
 
@@ -63,5 +71,9 @@ class EventsController < ApplicationController
 	private
   		def event_params
     		params.require(:event).permit(:title, :text, :date)
+  		end
+
+  		def groupedtweets
+  			@groupedtweets ||= []
   		end
 end

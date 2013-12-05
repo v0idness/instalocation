@@ -1,7 +1,24 @@
 <h1>Create event here</h1>
 list of events by tweets: title: location, followed by list of tweets<br>
 selection of an event (radio button)<br>
-form for entering title, text to the event
+form for entering title, text to the event<br>
+# of tweet groups: <%= groupedtweets.count %>
+<br>
+
+<% # list of the events %>
+<table>
+  <tr>
+    <th>Location</th>
+    <th>Tweets</th>
+  </tr>
+ 
+  <% groupedtweets.each do |g| %>
+    <tr>
+      <td>Location <%= g.first.place.full_name %><br> # of tweets: <%= g.count %></td>
+      <td><% g.each do |t| %> <%= t.user.name %>: <%= t.text %><br/> <% end %><hr></td>
+    </tr>
+  <% end %>
+</table>
 
 <%= form_for :event, url: events_path do |f| %>
 	radio button list 
