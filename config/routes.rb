@@ -5,7 +5,8 @@ Tweeporter::Application.routes.draw do
 
   get "events/add"
 
-  resources :events
+
+  resources :events 
  
   root to: "home#index"
 end

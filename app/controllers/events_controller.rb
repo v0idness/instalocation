@@ -10,7 +10,12 @@ class EventsController < ApplicationController
 
 	def add
 		# COORDINATE PARSING ================================================================
-
+    if params[:address].present?
+      coord=Geocoder.coordinates(params[:address])
+    else
+      redirect_to "/events/new"
+    end      
+      
 		#get a Twitter connection object
   		client = Twitter::REST::Client.new do |config| 
   			config.consumer_key        = "93jNZ8LOHFDlqUs3z5PvEg"; 

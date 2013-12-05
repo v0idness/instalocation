@@ -1,18 +1,13 @@
 <h1>New event here</h1>
 Template stuff here; a form for putting a location.
 
-<%= form_for :event, url: events_add_path do |f| %>
+<%= form_tag events_add_path, :method => :get  do%>
   <p>
     <!--%= f.label :longitude %--><br>
-    <%= f.text_field :title %>
+    <%= text_field_tag :address, params[:address] %>
+
   </p>
- 
   <p>
-    <!--%= f.label :latitude %--><br>
-    <%= f.text_field :text %>
-  </p>
- 
-  <p>
-    <%= f.submit "Search nearby"%>
+   <%= submit_tag "Search near this location", :name => nil %>
   </p>
 <% end %>
