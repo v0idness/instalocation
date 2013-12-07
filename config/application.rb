@@ -38,5 +38,6 @@ module Tweeporter
 
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password]
+    config.paths['app/views'] << "app/views/devise"
   end
 end

@@ -1,6 +1,6 @@
 class EventsController < ApplicationController
 	helper_method :groupedtweets
-
+  before_filter :authenticate_user!, except: [:show, :index]
 	def index
     	#Get the events from the model; order by 'date' descending
     	@events = Event.order("date desc")    
