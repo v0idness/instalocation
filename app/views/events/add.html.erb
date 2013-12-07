@@ -1,29 +1,41 @@
-<h1>Create event here</h1>
-list of events by tweets: title: location, followed by list of tweets<br>
-selection of an event (radio button)<br>
-form for entering title, text to the event<br>
-# of tweet groups: <%= groupedtweets.count %>
-<br>
+<h1>Add Event</h1>
+Detected <%= pluralize(evnt_a.count, "possible event") %> near <%= coord[0].address %><br/>
 
-<% # list of the events %>
+<% if evnt_a.count > 0 then %>
+
+<%= form_for :event, url: events_path do |f| %>
+
 <table>
   <tr>
     <th>Location</th>
     <th>Tweets</th>
   </tr>
- 
-  <% groupedtweets.each do |g| %>
-    <tr>
-      <td>Location <%= g.first.place.full_name %><br> # of tweets: <%= g.count %></td>
-      <td><% g.each do |t| %> <%= t.user.name %>: <%= t.text %><br/> <% end %><hr></td>
-    </tr>
-  <% end %>
+    <% evnt_a.each do |g| %>
+      <tr>
+        <td>Location: <%= g.first.place.full_name %><br> 
+        # of tweets: <%= g.count %>
+        <td><% g.each do |t| %> <%= t.user.name %>: <%= t.text %><br/> <% end %>
+        <hr></td>
+      </tr>
+    <% end %>
 </table>
 
-<%= form_for :event, url: events_path do |f| %>
-	radio button list 
- 
+Do any of these photos correspond to the event?<br />
+<% photos.each do |p| %>
+  <% if p.caption.nil? %>
+    <%= image_tag("#{p.images.thumbnail.url}", size: "#{p.images.thumbnail.width}x#{p.images.thumbnail.height}", alt: "#{p.user.full_name}" ) %>
+  <% else %>
+    <%= image_tag("#{p.images.thumbnail.url}", size: "#{p.images.thumbnail.width}x#{p.images.thumbnail.height}", alt: "#{p.caption.from.full_name}: #{p.caption.text}" ) %>
+  <% end %>
+<% end %>
+
   <p>
     <%= f.submit %>
   </p>
 <% end %>
+
+<% else %> 
+<%= link_to 'Try again', new_event_path %>
+<% end %>
+
+
