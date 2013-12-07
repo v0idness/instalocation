@@ -2,7 +2,8 @@ class EventsController < ApplicationController
 	helper_method :evnt_a # is an array of arrays of tweet object groups
   helper_method :coord
   helper_method :photos
-
+  before_filter :authenticate_user!, except: [:show, :index]
+  
 	def index
     	#Get the events from the model; order by 'date' descending
     	@events = Event.order("date desc")    

@@ -12,6 +12,7 @@ gem 'rake', '0.8.7'
 gem 'twitter'
 gem 'geocoder'
 gem 'instagram'
+gem 'devise'
 # Use unicorn as the web server
 # gem 'unicorn'
 
