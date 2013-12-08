@@ -14,4 +14,10 @@ Tweeporter::Application.routes.draw do
   resources :events 
  
   root to: "home#index"
+
+  resources :events do
+    member do 
+        post 'create'
+    end
+end
 end

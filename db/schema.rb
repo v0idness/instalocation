@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131206231138) do
+ActiveRecord::Schema.define(:version => 20131207180855) do
 
   create_table "events", :force => true do |t|
     t.string   "title"
@@ -26,6 +26,16 @@ ActiveRecord::Schema.define(:version => 20131206231138) do
     t.float    "latitude"
     t.float    "longitude"
     t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "photos", :force => true do |t|
+    t.string   "user"
+    t.text     "caption"
+    t.string   "thumbnail"
+    t.string   "image"
+    t.integer  "event_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

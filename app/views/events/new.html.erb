@@ -1,11 +1,12 @@
 <h1>New event here</h1>
-Template stuff here; a form for putting a location.
+Where did the event take place?
 
 <%= form_tag events_add_path, :method => :get  do%>
   <p>
-    <!--%= f.label :longitude %--><br>
     <%= text_field_tag :address, params[:address] %>
-
+  </p>
+  <p> Optional: enter a keyword for the event.<br />
+    <%= text_field_tag :query, params[:query] %>
   </p>
   <p>
    <%= submit_tag "Search near this location", :name => nil %>
