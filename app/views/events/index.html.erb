@@ -1,19 +1,12 @@
 <h1>Events</h1>
- 
-<table>
-  <tr>
-    <th>Title</th>
-    <th>Text</th>
-    <th>Date</th>
-    <th>Location</th>
-  </tr>
- 
-  <% @events.each do |event| %>
-    <tr>
-      <td><%= event.title %></td>
-      <td><%= event.text %></td>
-      <td><%= event.date %></td>
-      <td><%= event.location_id %></td>
-    </tr>
-  <% end %>
-</table>
+
+<% @events.each do |event| %> 
+<div class="col-lg-6">
+ <a href="#linktoevent"><h2><%= event.title %></h2></a>
+   <span class="event_date"><%= event.date %> @ <%= event.location_id %></span>
+   <p>
+   <%= event.text %>
+   </p>
+    <p><a class="btn btn-default" href="#">View details &raquo;</a></p>
+</div>
+<% end %>

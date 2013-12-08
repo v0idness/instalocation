@@ -1,0 +1,43 @@
+
+
+/* ==========================================================================
+   Author's custom styles
+   ========================================================================== */
+
+.center {
+	width: 100%;
+	text-align: center;
+}
+
+.logo {
+	background: url(../img/logo.png) no-repeat center;
+	min-width: 139px;
+	min-height: 175px;
+	text-align: center;
+	padding-top: 200px;
+	font-size: 1.7em;
+	margin-top: -50px;
+}
+
+.logo a {
+	text-shadow: 1px 1px 1px #fff;
+}
+.logo a:hover, .logo a:active {
+	text-decoration: none;
+}
+.event_date {
+	font-size: 0.8em;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
