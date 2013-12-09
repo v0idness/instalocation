@@ -1,7 +1,7 @@
 <h1>Add Event</h1>
-Detected <%= pluralize(evnt_a.count, "possible event") %> near <%= coord[0].address %><br/>
+Detected <%= pluralize(@evnt_a.count, "possible event") %> near <%= @coord[0].address %><br/>
 
-<% if evnt_a.count > 0 then %>
+<% if @evnt_a.count > 0 then %>
 
 <%= form_tag(controller: :events, action: :create)  do%>
 <h2>Events</h2>
@@ -13,9 +13,9 @@ From the events that recently took place nearby, place select the one you know s
     <th>Location</th>
     <th>Tweets</th>
   </tr>
-    <% evnt_a.each do |g| %>
+    <% @evnt_a.each do |g| %>
       <tr>
-        <td><%= radio_button_tag(:evnt, "#{g.first.id}") %></td>
+        <td><%= radio_button_tag(:evnt, "#{@query},#{(g.first.place.bounding_box.coordinates[0][0][1]+g.first.place.bounding_box.coordinates[0][2][1])/2},#{(g.first.place.bounding_box.coordinates[0][0][0]+g.first.place.bounding_box.coordinates[0][1][0])/2} #{g.first.place.country};#{g.first.place.full_name}") %></td>
         <td>Location: <%= g.first.place.full_name %><br> 
         # of tweets: <%= g.count %>
         <td><% g.each do |t| %> <%= t.user.name %>: <%=raw display_with_links(t.text) %><br/> <% end %>
@@ -25,8 +25,8 @@ From the events that recently took place nearby, place select the one you know s
 </table>
 
 Do any of these photos correspond to the event?<br />
-<% photos.each do |p| %>
-  <%= check_box_tag(:photo, "#{p.id}") %>
+<% @photos.each do |p| %>
+  <%= check_box_tag "photo[]", p.id, false %>
   <% if p.caption.nil? %>
     <%= image_tag("#{p.images.thumbnail.url}", size: "#{p.images.thumbnail.width}x#{p.images.thumbnail.height}", alt: "#{p.user.full_name}" ) %>
   <% else %>

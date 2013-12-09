@@ -1,7 +1,4 @@
 class EventsController < ApplicationController
-	helper_method :evnt_a # is an array of arrays of tweet object groups
-  helper_method :coord
-  helper_method :photos
   before_filter :authenticate_user!, except: [:show, :index]
   
 	def index
@@ -21,33 +18,16 @@ class EventsController < ApplicationController
 
     # check whether an address was entered, and a location found for this address
     if !@coord.nil? and !@coord[0].nil? then
-      
-		  #get a Twitter connection object
-  		client = Twitter::REST::Client.new do |config| 
-  			config.consumer_key        = "93jNZ8LOHFDlqUs3z5PvEg"; 
-  			config.consumer_secret     = "lRSw2AqT3viPYrqc1wzHP0Rnm7q6euYwkrrldFqW8"; 
-  			config.access_token        = "2190411696-XGq1cUKpN9EVb8bOvEEwDNE0mXkyn872ysEN1t0"; 
-  			config.access_token_secret = "NGNLEwFS9KIylf56sMpZZkeZFZUDfgmHlGesgxgBKtYH3"; 
-  		end
 
-      Instagram.configure do |config|
-        config.client_id = "4fa1490a44004debbb3117965b3ab141"
-        config.client_secret = "8f0e04bf5a494c73b3134f689540f459"
-      end
 
-      # get corresponding instagram photos from location
-      @photos = Instagram.media_search("#{@coord[0].latitude}","#{@coord[0].longitude}")
-
-      query = " "
+      coords = "#{@coord[0].latitude},#{@coord[0].longitude}"
+      @query = " "
       if params[:query].present?
-        query = params[:query]
+        @query = params[:query]
       end 
 
-  		#execute twitter search
-  		search = client.search(query, 
-  			:geocode => "#{@coord[0].latitude},#{@coord[0].longitude},1km", 
-  			:count => 100, 
-  			:result_type => "recent")
+  		# call search function
+      search = Event.t_exec_search(coords,@query)
 
   		# list of the locations appearing in all the retrieved tweets
   		t_locations = Array.new
@@ -74,6 +54,10 @@ class EventsController < ApplicationController
     	end
     	@evnt_a = @evnt_a.sort {|x,y| y.count <=> x.count}
 
+      # get corresponding instagram photos from location
+      Event.i_config
+      @photos = Instagram.media_search("#{@coord[0].latitude}","#{@coord[0].longitude}")
+
     else
       redirect_to new_event_path
     end
@@ -81,74 +65,74 @@ class EventsController < ApplicationController
 	end
 
 	def create
-    event_tweets = @evnt_a # TODO why is this nil
+    # regular expression for the parameters of the event/group of tweets
+    re = /([\w\s]*),(\S*)\s([\S\s]*);([\S\s]*)/ 
+    regm = params[:evnt].match re
+    query = regm[1] # search query
+    coords = regm[2] # coordinates of the chosen location
+    country = regm[3] # country of the location
+    locname = regm[4] # name of the chosen location
 
-    @evnt_a.each do |e|
-      if params[:evnt] == e.first.id then
-        event_tweets = e 
-        break
+    re = /([\-\.\d]*),([\-\.\d]*)/ 
+    regm = coords.match re
+    lat = coords[1]
+    lng = coords[2]
+
+
+    # create location for the event
+    if !Location.exists?(:name => locname) then
+      @loc = Location.create({
+        :country => country,
+        :latitude => lat,
+        :longitude => lng,
+        :name => locname
+        })
+    end
+    @loc = Location.find_by_name(locname)
+
+    # create the event
+    @event = Event.create({
+      :title => params[:title],
+      :text => params[:text],
+      :date => Time.now,
+      :location_id => @loc.id
+      })
+
+    # call search function
+    search = Event.t_exec_search(coords,query)
+
+    # store tweets
+    search.each do |t|
+      if t.place.full_name == locname then
+        Tweet.create({
+          :user => t.user.name,
+          :text => t.text,
+          :event_id => @event.id
+        })
       end
     end
 
-    # create location for the event
-    if !Location.where(name: event_tweets.first.place.full_name).first.nil? then
-      loc = Location.create!({
-        :country => event_tweets.first.place.country,
-        :latitude => (event_tweets.first.place.bounding_box.coordinates[0][0][1]+event_tweets.first.place.bounding_box.coordinates[0][2][1])/2,
-        :longitude => (event_tweets.first.place.bounding_box.coordinates[0][0][0]+event_tweets.first.place.bounding_box.coordinates[0][1][0])/2,
-        :name => event_tweets.first.place.full_name
-        })
-    else
-      loc = Location.where(name: params[:evnt].first.place.full_name)
-    end
+    if !params[:photo].nil? then
+      # create the associated photos
+      Event.i_config
 
-    # create the event
-    @event = loc.events.create!({
-      :title => params[:title],
-      :text => params[:text],
-      :date => Time.now
-      })
-
-    # create the associated tweets
-    event_tweets.each do |t|
-      @event.tweets.create!({
-        :user => t.user.name,
-        :text => t.text #,
-        # TODO :datetime => 
-        })
-    end
-
-    # create the associated photos
-    @photos.each do |p|
-      if params[:photo] == p.id then
-        @event.photos.create!({
-          :user => p.user.username,
-          :caption => p.caption.text,
-          :thumbnail => p.images.thumbnail.url,
-          :image => p.images.standard_resolution.url
+      params[:photo].each do |p|
+        item = Instagram.media_item(p)
+        Photo.create({
+          :user => item.user.username,
+          #:caption => item.caption.nil ? "" : item.caption.text,
+          :thumbnail => item.images.thumbnail.url,
+          :image => item.images.standard_resolution.url,
+          :event_id => @event.id
           })
       end
     end
 
-  	#redirect_to @event
+  	redirect_to @event
 	end
 
 	def show
   		@event = Event.find(params[:id])
 	end
 
-	private
-  		def event_params
-    		params.require(:event).permit(:title, :text, :date)
-  		end
-
-  		def evnt_a
-  			@evnt_a ||= [[[]]]
-  		end
-      def coord
-        @coord ||= []
-      end
-      def photos
-        @photos ||= []
-      end
 end
