@@ -23,7 +23,7 @@ Tweeporter::Application.configure do
     :enable_starttls_auto => true,
     :address => "smtp.gmail.com",
     :port => 587,
-    :domain => "http://arcane-garden-3885.herokuapp.com",
+    :domain => "localhost:3000",
     :authentication => :login,
     :user_name => "tweeporters@gmail.com",
     :password => "socialcomputing"

@@ -44,7 +44,7 @@ Tweeporter::Application.configure do
     :enable_starttls_auto => true,
     :address => "smtp.gmail.com",
     :port => 587,
-    :domain => "localhost:3000",
+    :domain => "heroku run rake db:migrate",
     :authentication => :login,
     :user_name => "tweeporters@gmail.com",
     :password => "socialcomputing"
