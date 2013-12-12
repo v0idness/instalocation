@@ -44,7 +44,7 @@ Tweeporter::Application.configure do
     :enable_starttls_auto => true,
     :address => "smtp.gmail.com",
     :port => 587,
-    :domain => "http://arcane-garden-3885.herokuapp.com",
+    :domain => "arcane-garden-3885.herokuapp.com",
     :authentication => :login,
     :user_name => "tweeporters@gmail.com",
     :password => "socialcomputing"
@@ -59,5 +59,5 @@ Tweeporter::Application.configure do
 
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
-  config.action_mailer.default_url_options = { :host => 'http://arcane-garden-3885.herokuapp.com' }
+  config.action_mailer.default_url_options = { :host => 'arcane-garden-3885.herokuapp.com' }
 end
