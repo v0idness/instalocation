@@ -1,7 +1,9 @@
 Tweeporter::Application.routes.draw do
   devise_for :users, :controllers => { :registrations => "registrations" }
   resources :users
-
+  devise_for :users do
+    get "/users/sign_out" => "devise/sessions#destroy", :as => :destroy_user_session
+  end
   get "events/index"
 
   get "home/index"
