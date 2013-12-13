@@ -79,53 +79,58 @@ class EventsController < ApplicationController
     lng = coords[2]
 
 
-    # create location for the event
-    if !Location.exists?(:name => locname) then
-      @loc = Location.create({
-        :country => country,
-        :latitude => lat,
-        :longitude => lng,
-        :name => locname
-        })
-    end
-    @loc = Location.find_by_name(locname)
-
-    # create the event
-    @event = Event.create({
-      :title => params[:title],
-      :text => params[:text],
-      :date => Time.now,
-      :location_id => @loc.id
-      })
-
-    # call search function
-    search = Event.t_exec_search(coords,query)
-
-    # store tweets
-    search.each do |t|
-      if t.place.full_name == locname then
-        Tweet.create({
-          :user => t.user.name,
-          :text => t.text,
-          :event_id => @event.id
-        })
-      end
-    end
-
-    if !params[:photo].nil? then
-      # create the associated photos
-      Event.i_config
-
-      params[:photo].each do |p|
-        item = Instagram.media_item(p)
-        Photo.create({
-          :user => item.user.username,
-          #:caption => item.caption.nil ? "" : item.caption.text,
-          :thumbnail => item.images.thumbnail.url,
-          :image => item.images.standard_resolution.url,
-          :event_id => @event.id
+    if !Event.exists?(:title => params[:title]) then
+    
+      # create location for the event
+      if !Location.exists?(:name => locname) then
+        @loc = Location.create({
+          :country => country,
+          :latitude => lat,
+          :longitude => lng,
+          :name => locname
           })
       end
+      @loc = Location.find_by_name(locname)
+
+      # create the event
+      @event = Event.create({
+        :title => params[:title],
+        :text => params[:text],
+        :date => Time.now,
+        :location_id => @loc.id
+        })
+
+      # call search function
+      search = Event.t_exec_search(coords,query)
+
+      # store tweets
+      search.each do |t|
+        if t.place.full_name == locname then
+          Tweet.create({
+            :user => t.user.name,
+            :text => t.text,
+            :event_id => @event.id
+          })
+        end
+      end
+
+      if !params[:photo].nil? then
+        # create the associated photos
+        Event.i_config
+
+        params[:photo].each do |p|
+          item = Instagram.media_item(p)
+          Photo.create({
+            :user => item.user.username,
+            #:caption => item.caption.nil ? "" : item.caption.text,
+            :thumbnail => item.images.thumbnail.url,
+            :image => item.images.standard_resolution.url,
+            :event_id => @event.id
+            })
+        end
+      end
+
+      #current_user.level++ # TODO test
     end
 
   	redirect_to @event

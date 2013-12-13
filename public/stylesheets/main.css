@@ -29,6 +29,19 @@
 	font-size: 0.8em;
 }
 
+.reportevent {
+	width: 45%;
+	min-width: 320px;
+	margin: -50px auto 0 auto;
+}
+
+.tweetgroup {
+	font-size: 0.8em;
+}
+
+.row {
+	margin-top: -50px;
+}
 
 
 

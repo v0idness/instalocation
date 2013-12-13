@@ -1,14 +1,15 @@
-<h1>New event here</h1>
-Where did the event take place?
-
+<div class="reportevent">
 <%= form_tag events_add_path, :method => :get  do%>
   <p>
-    <%= text_field_tag :address, params[:address] %>
+  	<%= label_tag 'address', 'Where did the event take place?' %>
+    <%= text_field_tag :address, params[:address], :class => 'form-control' %>
   </p>
-  <p> Optional: enter a keyword for the event.<br />
-    <%= text_field_tag :query, params[:query] %>
+  <p> <br />
+  <%= label_tag 'query', 'Optional: enter a keyword for the event.' %>
+    <%= text_field_tag :query, params[:query], :class => 'form-control' %>
   </p>
   <p>
    <%= submit_tag "Search near this location", :name => nil %>
   </p>
 <% end %>
+</div>

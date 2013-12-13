@@ -10,14 +10,20 @@ Tweeporter::Application.routes.draw do
   
   get "confirmation/index"
 
+  resources :locations
+
 	default_url_options :host => "localhost:3000"
+
   resources :events 
+  
+  root to: "events#index"
  
-  root to: "home#index"
+  
 
   resources :events do
     member do 
         post 'create'
     end
-end
+  end
+
 end
