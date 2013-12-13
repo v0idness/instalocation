@@ -1,0 +1,5 @@
+<ul class="nav navbar-nav">
+	<% Location.select(:country).map(&:country).uniq.collect do |c| %>
+		<li><a href="#countrylink"><%= c %></a></li>
+	<% end %>
+</ul>
