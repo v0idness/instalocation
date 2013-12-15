@@ -5,42 +5,50 @@ Detected <%= pluralize(@evnt_a.count, "possible event") %> near <%= @coord[0].ad
 
 <%= form_tag(controller: :events, action: :create)  do%>
 <h2>Events</h2>
-From the events that recently took place nearby, place select the one you know something about!
+From the events that recently took place nearby, please select the one you know something about!
 
-<table>
-  <tr>
-    <th></th>
-    <th>Location</th>
-    <th>Tweets</th>
-  </tr>
-    <% @evnt_a.each do |g| %>
-      <tr>
-        <td><%= radio_button_tag(:evnt, "#{@query},#{(g.first.place.bounding_box.coordinates[0][0][1]+g.first.place.bounding_box.coordinates[0][2][1])/2},#{(g.first.place.bounding_box.coordinates[0][0][0]+g.first.place.bounding_box.coordinates[0][1][0])/2} #{g.first.place.country};#{g.first.place.full_name}") %></td>
-        <td>Location: <%= g.first.place.full_name %><br> 
-        # of tweets: <%= g.count %>
-        <td><% g.each do |t| %> <%= t.user.name %>: <%=raw display_with_links(t.text) %><br/> <% end %>
-        <hr></td>
-      </tr>
-    <% end %>
-</table>
+<div class="row">
+<% @evnt_a.each do |g| %>
+<div class="col-lg-4">
+<span class="input-group-addon">
+<%= radio_button_tag(:evnt, "#{@query},#{(g.first.place.bounding_box.coordinates[0][0][1]+g.first.place.bounding_box.coordinates[0][2][1])/2},#{(g.first.place.bounding_box.coordinates[0][0][0]+g.first.place.bounding_box.coordinates[0][1][0])/2} #{g.first.place.country};#{g.first.place.full_name}") %> <%= g.first.place.full_name %></span><br /> 
+  There have been <%= pluralize(g.count, "tweet") %> from <%= g.first.place.name %>:
+  <div class="tweetscroller tweetgroup well well-sm">
+    <% g.each do |t| %> <%= t.user.name %>: <%=raw display_with_links(t.text) %><br/> <% end %>
+  </div>
+</div>
+<% end %>
+</div>
 
+<h3>Photos</h3>
 Do any of these photos correspond to the event?<br />
 <% @photos.each do |p| %>
-  <%= check_box_tag "photo[]", p.id, false %>
+<div style="float:left; margin: 10px;">
   <% if p.caption.nil? %>
     <%= image_tag("#{p.images.thumbnail.url}", size: "#{p.images.thumbnail.width}x#{p.images.thumbnail.height}", alt: "#{p.user.full_name}" ) %>
   <% else %>
     <%= image_tag("#{p.images.thumbnail.url}", size: "#{p.images.thumbnail.width}x#{p.images.thumbnail.height}", alt: "#{p.caption.from.full_name}: #{p.caption.text}" ) %>
   <% end %>
+  <br /> <div class="center"><%= check_box_tag "photo[]", p.id, false %></div>
+</div>
 <% end %>
 
+
+<div style="clear:left;" class="form-group">
+<h3>Create the event</h3>
 <p>
-  <%= text_field_tag :title, params[:title] %>
-  <%= text_area_tag :text, params[:text] %>
+  <%= label_tag 'title', 'Please enter a title for the event.' %>
+  <%= text_field_tag :title, params[:title], :class => "form-control" %>
+</p>
+<p>
+<%= label_tag 'title', 'Optional: Enter an event description for some more information about the event.' %>
+  <%= text_area_tag :text, params[:text], :class => "form-control" %>
 </p>
   <p>
-    <%= submit_tag %>
+    <%= submit_tag "Create event!", :class => "btn btn-default" %>
   </p>
+
+</div>
 <% end %>
 
 <% else %> 
