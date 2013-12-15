@@ -5,11 +5,11 @@
     <%= text_field_tag :address, params[:address], :class => 'form-control' %>
   </p>
   <p> <br />
-  <%= label_tag 'query', 'Optional: enter a keyword for the event.' %>
+  <%= label_tag 'query', 'Optional: enter a search keyword for the event.' %>
     <%= text_field_tag :query, params[:query], :class => 'form-control' %>
   </p>
   <p>
-   <%= submit_tag "Search near this location", :name => nil %>
+   <%= submit_tag "Search near this location", :name => nil, :class => "btn btn-default" %>
   </p>
 <% end %>
 </div>

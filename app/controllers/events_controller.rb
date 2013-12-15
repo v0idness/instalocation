@@ -58,6 +58,7 @@ class EventsController < ApplicationController
       Event.i_config
       @photos = Instagram.media_search("#{@coord[0].latitude}","#{@coord[0].longitude}")
 
+
     else
       redirect_to new_event_path
     end
@@ -97,7 +98,8 @@ class EventsController < ApplicationController
         :title => params[:title],
         :text => params[:text],
         :date => Time.now,
-        :location_id => @loc.id
+        :location_id => @loc.id,
+        :user_id => current_user.id
         })
 
       # call search function
@@ -125,12 +127,12 @@ class EventsController < ApplicationController
             #:caption => item.caption.nil ? "" : item.caption.text,
             :thumbnail => item.images.thumbnail.url,
             :image => item.images.standard_resolution.url,
-            :event_id => @event.id
+            :event_id => @event.id            
             })
         end
       end
 
-      #current_user.level++ # TODO test
+      current_user.level += 1
     end
 
   	redirect_to @event
