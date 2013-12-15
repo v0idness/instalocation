@@ -1,0 +1,13 @@
+<% if !@locs.nil? then %>
+
+<div class="reportevent">
+<h1>Countries</h1>
+To date, events have been reported from these countries. Select a country to see what is going on there!
+
+<div class="list-group">
+<% @locs.each do |c| %> 
+ <%= link_to "#{c}  <span class='badge'> #{Location.where(:country => c).count} </span>".html_safe, "/locations/#{c.downcase}", :class => "list-group-item" %> 
+<% end %>
+</div>
+</div>
+<% end %>

@@ -12,6 +12,8 @@ Tweeporter::Application.routes.draw do
   
   get "confirmation/index"
 
+  match 'locations/:country', to: 'locations#bycountry'
+
   resources :locations
 
 	default_url_options :host => "localhost:3000"

@@ -1,18 +1,1 @@
-<% @events.each do |event| %> 
-<div class="col-lg-4">
- <a href="#linktoevent"><h2><%= event.title %></h2></a>
-   <span class="event_date"><%= event.date %> @ <%= event.location_id %>. Reported by </span>
-   	<% if event.photos.count > 0 then %>
-      <%=raw "<div style='background: url(#{event.photos.first.image}); width: 100%; height: 50px;'> </div>" %>
-    <% end %>
-   <p>
-   <%= event.text %>
-   <div class="tweetgroup">
-   <% event.tweets[0...5].each do |t| %>
-   		<%=raw display_truncated_no_links(t.text) %> |
-   	<% end %>
-   	</div>
-   </p>
-    <p><a class="btn btn-default" href="#">View details &raquo;</a></p><%=raw "<a href='/events/#{event.id}'>Link</a>" %>
-</div>
-<% end %>
+<%= render 'evlist' %>
