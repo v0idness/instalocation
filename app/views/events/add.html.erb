@@ -5,7 +5,7 @@ Detected <%= pluralize(@evnt_a.count, "possible event") %> near <%= @coord[0].ad
 
 <%= form_tag(controller: :events, action: :create)  do%>
 <h2>Events</h2>
-From the events that we have discovered nearby, please select the one you know something about based on the content of the tweets!
+From the events that we have discovered nearby, <strong>please select the one you know something about</strong> based on the content of the tweets!
 
 <div class="row">
 <% @evnt_a.each do |g| %>
