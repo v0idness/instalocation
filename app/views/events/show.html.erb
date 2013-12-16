@@ -1,2 +1,26 @@
-<h1>single event view</h1>
-show.html.erb
+<h2><%= @event.title %></h2>
+   <span class="event_date">Reported on <%= @event.date %> @ <%= Location.find(@event.location_id).name %>. Reported by <% if !@event.user_id.nil? then %><%= User.find(@event.user_id).name %> 
+      <% if User.find(@event.user_id).level < 3 then %> bronze badge 
+      <% elsif User.find(@event.user_id).level < 10 then %> silver badge
+      <% else %> gold badge <% end %> 
+      <% end %></span>
+   <p>
+   <%= @event.text %>
+   </p>
+
+   <p>
+   <h3>Tweets</h3>
+   <div class="tweetgroup">
+   <% @event.tweets[0...5].each do |t| %>
+   		<%= t.user %>: <%=raw display_with_links(t.text) %> <br />
+   	<% end %>
+   	</div>
+   	</p>
+
+   	<p>
+   	<h3><span class="glyphicon glyphicon-camera"></span> Photos</h3>
+   	<% @event.photos.each do |p| %>
+   		<%=raw "<a href ='#{p.image}'>
+   			<img src='#{p.thumbnail}' alt='#{p.user}' /> </a>" %>
+    <% end %>
+   </p>

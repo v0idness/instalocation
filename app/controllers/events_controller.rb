@@ -48,9 +48,9 @@ class EventsController < ApplicationController
     			end
     		end
     		# add only if there are XXX tweets/instagram photos for a location
-    		# if t_group.count >= 1 then
+    		if t_group.count >= 3 then
 	    		@evnt_a << t_group
-	    	# end
+	    	end
     	end
     	@evnt_a = @evnt_a.sort {|x,y| y.count <=> x.count}
 

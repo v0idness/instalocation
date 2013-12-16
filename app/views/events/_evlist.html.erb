@@ -1,14 +1,14 @@
 <% @events.each do |event| %> 
 <div class="col-lg-4">
- <a href="#linktoevent"><h2><%= event.title %></h2></a>
-   <span class="event_date"><%= event.date %> @ <%= Location.find(event.location_id).name %>. Reported by <% if !event.user_id.nil? then %><%= User.find(event.user_id).name %> 
+  <h2><%= link_to event.title, event %></h2>
+   <span class="event_date">Reported on <%= event.date %> @ <%= Location.find(event.location_id).name %>. Reported by <% if !event.user_id.nil? then %><%= User.find(event.user_id).name %> 
       <% if User.find(event.user_id).level < 3 then %> <%= image_tag("badge_bronze_s.png", alt: "Bronze reporter badge") %>
       <% elsif User.find(event.user_id).level < 10 then %> <%= image_tag("badge_silver_s.png", alt: "Silver reporter badge") %>
       <% else %> <%= image_tag("badge_gold_s.png", alt: "Gold reporter badge") %> <% end %> 
 
       <% end %></span>
    	<% if event.photos.count > 0 then %>
-      <%=raw "<div style='background: url(#{event.photos.first.image}); width: 100%; height: 50px;'> </div>" %>
+      <%=raw "<div style='background: url(#{event.photos.first.image}) center; width: 100%; height: 100px;'> </div>" %>
     <% end %>
    <p>
    <%= event.text %>
@@ -18,6 +18,6 @@
    	<% end %>
    	</div>
    </p>
-    <p><a class="btn btn-default" href="#">View details &raquo;</a></p><%=raw "<a href='/events/#{event.id}'>Link</a>" %>
+    <p><%= link_to "View details &raquo;".html_safe, event, :class => "btn btn-default" %> </p>
 </div>
 <% end %>

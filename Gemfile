@@ -21,6 +21,8 @@ gem 'twitter'
 gem 'geocoder'
 gem 'instagram'
 gem 'devise'
+
+gem 'bootstrap-addons-rails'
 # Use unicorn as the web server
 # gem 'unicorn'
 

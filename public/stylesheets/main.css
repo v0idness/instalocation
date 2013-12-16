@@ -40,9 +40,15 @@
 }
 
 .row {
-	margin-top: -50px;
+	/*margin-top: -50px;*/
 }
 
+.tweetscroller {
+	height: auto;
+	max-height: 250px;
+	overflow: auto;
+	margin-bottom: 20px;
+}
 
 
 
