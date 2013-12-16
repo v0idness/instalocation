@@ -1,4 +1,5 @@
 Tweeporter::Application.routes.draw do
+
   devise_for :users, :controllers => { :registrations => "registrations" }
   resources :users
   devise_for :users do
@@ -18,8 +19,10 @@ Tweeporter::Application.routes.draw do
 
 	default_url_options :host => "localhost:3000"
 
-  resources :events 
-  
+  #resources :events 
+  resources :events do
+    resources :comments, :only => [:create]
+  end
   root to: "events#index"
  
   
