@@ -1,3 +1,4 @@
+<div style="max-width: 900px; margin: 0 auto;">
 <h2><%= @event.title %></h2>
    <span class="event_date">Reported on <%= @event.date.strftime("%d %b %Y") %> @ <%= Location.find(@event.location_id).name %>. Reported by <% if !@event.user_id.nil? then %>
     <% if User.find(@event.user_id).level < 3 then %> <%= image_tag("badge_bronze_s.png", alt: "Bronze reporter badge") %>
@@ -12,11 +13,11 @@
 
    <p>
    <h3>Tweets</h3>
-   <div class="tweetgroup">
-   <% @event.tweets[0...5].each do |t| %>
+   <div style="overflow:auto; max-height: 300px;">
+   <% @event.tweets.each do |t| %>
    		<%= t.user %>: <%=raw display_with_links(t.text) %> <br />
    	<% end %>
-   	</div>
+      </div>
    	</p>
 
    	<p>
@@ -35,8 +36,9 @@
    <%= form_for [@event, Comment.new] do |f| %>
         <p>
                 <%= f.label :body, "New comment" %><br/>
-                <%= f.text_area :body %>
+                <%= f.text_area :body, :rows => "3", :class => 'form-control' %>
         </p>
-        <p><%= f.submit "Add comment" %></p>
+        <p><%= f.submit "Add comment", :class => 'btn btn-default' %></p>
    <% end %>
    <% end %>
+</div>

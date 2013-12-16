@@ -1,13 +1,13 @@
 <%= div_for comment do %>
         <p>
-                <strong>
-                        Posted <%= time_ago_in_words(comment.created_at) %> ago
-                </strong>
-                <br/>
-                <%= comment.body %>
+                <strong><%= comment.user.name%></strong>  <% if comment.user.level < 3 then %> <%= image_tag("badge_bronze_s.png", alt: "Bronze reporter badge") %>
+    <% elsif comment.user.level < 10 then %> <%= image_tag("badge_silver_s.png", alt: "Silver reporter badge") %>
+    <% else %> <%= image_tag("badge_gold_s.png", alt: "Gold reporter badge") %> 
+    <% end %> said <%= time_ago_in_words(comment.created_at) %> ago:
                 <p>
-      			<b>Author:</b>
-      			<%= comment.user.name%>
-    			</p>
+                <%= comment.body %>
+                </p>
+                <hr />
+                
         </p>
 <% end %>

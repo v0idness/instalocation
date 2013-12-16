@@ -11,7 +11,7 @@ From the events that we have discovered nearby, please select the one you know s
 <% @evnt_a.each do |g| %>
 <div class="col-lg-4">
 <span class="input-group-addon">
-<%= radio_button_tag(:evnt, "#{@query},#{(g.first.place.bounding_box.coordinates[0][0][1]+g.first.place.bounding_box.coordinates[0][2][1])/2},#{(g.first.place.bounding_box.coordinates[0][0][0]+g.first.place.bounding_box.coordinates[0][1][0])/2} #{g.first.place.country};#{g.first.place.full_name}") %> <%= g.first.place.full_name %></span><br /> 
+<%= radio_button_tag(:evnt, "#{@query},#{g.first.place.bounding_box.coordinates[0][0][1]},#{g.first.place.bounding_box.coordinates[0][0][0]} #{g.first.place.country};#{g.first.place.full_name}") %> <%= g.first.place.full_name %></span><br /> 
   There have been <%= pluralize(g.count, "tweet") %> from <%= g.first.place.name %>:
   <div class="tweetscroller tweetgroup well well-sm">
     <% g.each do |t| %> <%= t.user.name %>: <%=raw display_with_links(t.text) %><br/> <% end %>

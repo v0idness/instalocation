@@ -13,17 +13,17 @@
 
   <div class="field">
     <%= f.label :body %><br />
-    <%= f.text_area :body %>
+    <%= f.text_area :body, :class => 'form-control' %>
   </div>
   <div class="field">
     <%= f.label :user_id %><br />
-    <%= f.text_field :user_id %>
+    <%= f.text_field :user_id, :class => 'form-control' %>
   </div>
   <div class="field">
     <%= f.label :event_id %><br />
-    <%= f.text_field :event_id %>
+    <%= f.text_field :event_id, :class => 'form-control' %>
   </div>
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit, :class => 'btn btn-default' %>
   </div>
 <% end %>
