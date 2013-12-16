@@ -5,7 +5,7 @@ Detected <%= pluralize(@evnt_a.count, "possible event") %> near <%= @coord[0].ad
 
 <%= form_tag(controller: :events, action: :create)  do%>
 <h2>Events</h2>
-From the events that recently took place nearby, please select the one you know something about!
+From the events that we have discovered nearby, please select the one you know something about based on the content of the tweets!
 
 <div class="row">
 <% @evnt_a.each do |g| %>
@@ -34,7 +34,7 @@ Do any of these photos correspond to the event?<br />
 <% end %>
 
 
-<div style="clear:left;" class="form-group">
+<div style="clear:left; max-width: 500px; margin: 0 auto;" class="form-group">
 <h3>Create the event</h3>
 <p>
   <%= label_tag 'title', 'Please enter a title for the event.' %>

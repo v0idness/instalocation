@@ -16,7 +16,7 @@ class Event < ActiveRecord::Base
 
   		#execute twitter search
   		search = client.search(query, 
-  			:geocode => "#{coords},1km", 
+  			:geocode => "#{coords},3km", 
   			:count => 100, 
   			:result_type => "recent")
 
