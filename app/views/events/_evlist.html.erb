@@ -5,8 +5,8 @@
     <% if User.find(event.user_id).level < 3 then %> <%= image_tag("badge_bronze_s.png", alt: "Bronze reporter badge") %>
     <% elsif User.find(event.user_id).level < 10 then %> <%= image_tag("badge_silver_s.png", alt: "Silver reporter badge") %>
     <% else %> <%= image_tag("badge_gold_s.png", alt: "Gold reporter badge") %> 
-    <%= User.find(event.user_id).name %> 
     <% end %> 
+    <%= User.find(event.user_id).name %> 
     <% end %></span>
     
     <% if event.photos.count > 0 then %>
