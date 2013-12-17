@@ -74,11 +74,13 @@ class EventsController < ApplicationController
     country = regm[3] # country of the location
     locname = regm[4] # name of the chosen location
 
+    puts params[:evnt]
+    puts regm
+
     re = /([\-\.\d]*),([\-\.\d]*)/ 
     regm = coords.match re
-    lat = coords[1]
-    lng = coords[2]
-
+    lat = regm[1]
+    lng = regm[2]
 
     if !Event.exists?(:title => params[:title]) then
     
