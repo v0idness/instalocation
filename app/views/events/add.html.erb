@@ -1,29 +1,44 @@
 <h1>Add Event</h1>
-Detected <%= pluralize(@evnt_a.count, "possible event") %> near <%= @coord[0].address %><br/>
+Retrieved <%= pluralize(@tweets.count, "tweet") %> near <%= @coord[0].address %>.<br/>
 
-<% if @evnt_a.count > 0 then %>
+<% if @tweets.count < 1 then %>
+<%= link_to 'Try again', new_event_path %>
 
-<%= form_tag(controller: :events, action: :create)  do%>
-<h2>Events</h2>
-From the nearby locations where activity has been discovered, <strong>please select the one you know something about</strong> based on the content of the tweets!
+<% else %> 
+
+<%= form_tag(controller: :events, action: :create)  do %>
+<h2>Tweets</h2>
+These are tweets that were recently posted nearby<% if !@query.blank? %> about <%= @query %><% end %>. Please <strong>select those that contain information about the event!</strong>
 
 <div class="row">
-<% @evnt_a.each do |g| %>
-<% if @evnt_a.count == 1 then %>
-<div class="col-lg-12">
-<% elsif @evnt_a.count == 2 then %>
-<div class="col-lg-6">
+<% if @tweets.count <= 40 then %>
+<div class="col-lg-10 tweetscroller well well-sm" style="margin: 0 auto;">
+    <% @tweets.each do |t| %> 
+      <%= check_box_tag "tweet[]", t.id, false %> 
+      <%= t.user.name %>: 
+      <% if @query.blank? then %>
+        <%=raw display_with_links(t.text,) %>
+      <% else %> 
+        <%=raw highlight_query(t.text,@query) %>
+      <% end %><br/> 
+    <% end %>
 <% else %>
-<div class="col-lg-4">
+  <% @tweets.each_slice((@tweets.count.to_f/2).ceil) do |slice| %>
+    <div class="col-lg-6 tweetscroller well well-sm">
+      <% @tweets.each do |t| %> 
+        <%= check_box_tag "tweet[]", t.id, false %> 
+        <%= t.user.name %>: 
+        <% if @query.blank? then %>
+         <%=raw display_with_links(t.text,) %>
+        <% else %> 
+          <%=raw highlight_query(t.text,@query) %>
+        <% end %><br/> 
+      <% end %>
+    </div>
+  <% end %>
 <% end %>
-<span class="input-group-addon">
-<%= radio_button_tag(:evnt, "#{@query},#{@coord[0].latitude},#{@coord[0].longitude} #{g.first.place.country};#{g.first.place.full_name}") %> <%= g.first.place.full_name %></span><br /> 
-  There have been <%= pluralize(g.count, "tweet") %> from <%= g.first.place.name %>:
-  <div class="tweetscroller tweetgroup well well-sm">
-    <% g.each do |t| %> <%= t.user.name %>: <%=raw display_with_links(t.text) %><br/> <% end %>
-  </div>
+<%= hidden_field_tag(:evnt, "#{@query},#{@coord[0].latitude},#{@coord[0].longitude} #{@coord[0].country};#{@coord[0].address_components[0].first[1]}") %>
 </div>
-<% end %>
 </div>
 
 <h3>Photos</h3>
@@ -48,7 +63,7 @@ Do any of these photos correspond to the event?<br />
 </p>
 <p>
 <%= label_tag 'title', 'Optional: Enter an event description for some more information about the event.' %>
-  <%= text_area_tag :text, params[:text], :class => "form-control" %>
+  <%= text_area_tag :text, params[:text], :rows => 10, :class => "form-control" %>
 </p>
   <p>
     <%= submit_tag "Create event!", :class => "btn btn-default" %>
@@ -57,8 +72,4 @@ Do any of these photos correspond to the event?<br />
 </div>
 <% end %>
 
-<% else %> 
-<%= link_to 'Try again', new_event_path %>
 <% end %>
-
-

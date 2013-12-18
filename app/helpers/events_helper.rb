@@ -5,6 +5,11 @@ module EventsHelper
     	text.gsub(/(http:\/\/[a-zA-Z0-9\/\.\+\-_:?&=]+)/) {|a| "<a href=\"#{a}\">#{a}</a>"}
   	end
 
+    def highlight_query(text,query)
+      text = text.gsub(/(http:\/\/[a-zA-Z0-9\/\.\+\-_:?&=]+)/) {|a| "<a href=\"#{a}\">#{a}</a>"}
+      text.gsub(/#{query}/i) {|q| "<span class=\"query\">#{q}</span>"}
+    end
+
   	def display_truncated_no_links(text)
     	text = text.gsub(/(http:\/\/[a-zA-Z0-9\/\.\+\-_:?&=]+)/) {|a| ""}
     	if text.length > 70 then

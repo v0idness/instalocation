@@ -2,9 +2,9 @@
 <div class="col-lg-4">
   <h2><%= link_to event.title, event %></h2>
   <span class="event_date">Reported on <%= event.date.strftime("%d %b %Y") %> @ <%= Location.find(event.location_id).name %>. Reported by <% if !event.user_id.nil? then %>
-    <% if User.find(event.user_id).level < 3 then %> <%= image_tag("badge_bronze_s.png", alt: "Bronze reporter badge") %>
+    <% if User.find(event.user_id).level < 3 and User.find(event.user_id).level > 0 then %> <%= image_tag("badge_bronze_s.png", alt: "Bronze reporter badge") %>
     <% elsif User.find(event.user_id).level < 10 then %> <%= image_tag("badge_silver_s.png", alt: "Silver reporter badge") %>
-    <% else %> <%= image_tag("badge_gold_s.png", alt: "Gold reporter badge") %> 
+    <% elsif User.find(event.user_id).level >= 10 %> <%= image_tag("badge_gold_s.png", alt: "Gold reporter badge") %> 
     <% end %> 
     <%= User.find(event.user_id).name %> 
     <% end %></span>
@@ -13,10 +13,10 @@
     <%=raw "<div style='background: url(#{event.photos.first.image}) center; width: 100%; height: 100px;'> </div>" %>
     <% end %>
     <p>
-     <%= event.text %>
+     <%= event.text[0...300] %><% if event.text.length > 300 then %>...<% end %>
      <div class="tweetgroup">
        <% event.tweets[0...5].each do |t| %>
-       <%=raw display_truncated_no_links(t.text) %> |
+       <%=raw display_truncated_no_links(t.text) %> /
        <% end %>
      </div>
    </p>

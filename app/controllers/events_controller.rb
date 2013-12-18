@@ -2,8 +2,7 @@ class EventsController < ApplicationController
   before_filter :authenticate_user!, except: [:show, :index]
   
 	def index
-    #Get the events from the model; order by 'date' descending
-    @events = Event.order("date desc")    
+    @events = Event.order("id desc")    
     
     @ev = Event.all
     @locations=Location.all
@@ -45,30 +44,10 @@ class EventsController < ApplicationController
   		# call search function
       search = Event.t_exec_search(coords,@query)
 
-  		# list of the locations appearing in all the retrieved tweets
-  		t_locations = Array.new
+  		@tweets = Array.new
   		search.each do |tweet|
-  			if tweet.place? then
-  				t_locations << tweet.place.full_name
-  				t_locations = t_locations.uniq
-  			end
+  			@tweets << tweet
     	end
-
-    	# array of tweet object arrays for each location
-    	@evnt_a = Array.new
-    	t_locations.each do |loc|
-    		t_group = Array.new
-    		search.each do |t|
-    			if t.place.full_name == loc then
-    				t_group << t
-    			end
-    		end
-    		# add only if there are XXX tweets/instagram photos for a location
-    		if t_group.count >= 3 then
-	    		@evnt_a << t_group
-	    	end
-    	end
-    	@evnt_a = @evnt_a.sort {|x,y| y.count <=> x.count}
 
       # get corresponding instagram photos from location
       Event.i_config
@@ -82,6 +61,9 @@ class EventsController < ApplicationController
 	end
 
 	def create
+    if params[:tweet].nil? and params[:photo].nil?
+      redirect_to events_add_path
+    else
     # regular expression for the parameters of the event/group of tweets
     re = /([\w\s]*),(\S*)\s([\S\s]*);([\S\s]*)/ 
     regm = params[:evnt].match re
@@ -99,7 +81,7 @@ class EventsController < ApplicationController
     
       # create location for the event
       if !Location.exists?(:name => locname) then
-        @loc = Location.create({
+        @loc = Location.create!({
           :country => country,
           :latitude => lat,
           :longitude => lng,
@@ -109,7 +91,7 @@ class EventsController < ApplicationController
       @loc = Location.find_by_name(locname)
 
       # create the event
-      @event = Event.create({
+      @event = Event.create!({
         :title => params[:title],
         :text => params[:text],
         :date => Time.now,
@@ -117,15 +99,15 @@ class EventsController < ApplicationController
         :user_id => current_user.id
         })
 
-      # call search function
-      search = Event.t_exec_search(coords,query)
+      if !params[:tweet].nil? then
+        # create the associated tweets
+        client = Event.t_config
 
-      # store tweets
-      search.each do |t|
-        if t.place.full_name == locname then
-          Tweet.create({
-            :user => t.user.name,
-            :text => t.text,
+        params[:tweet].each do |t|
+          item = client.status(t)
+          Tweet.create!({
+            :user => item.user.name,
+            :text => item.text,
             :event_id => @event.id
           })
         end
@@ -137,7 +119,7 @@ class EventsController < ApplicationController
 
         params[:photo].each do |p|
           item = Instagram.media_item(p)
-          Photo.create({
+          Photo.create!({
             :user => item.user.username,
             #:caption => item.caption.nil ? "" : item.caption.text,
             :thumbnail => item.images.thumbnail.url,
@@ -148,10 +130,11 @@ class EventsController < ApplicationController
         end
       end
 
-      current_user.level += 1
+      current_user.update_attribute(:level, current_user.level + 1)
     end
 
   	redirect_to @event
+  end
 	end
 
 	def show
