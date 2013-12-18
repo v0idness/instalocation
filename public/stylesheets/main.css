@@ -50,7 +50,12 @@
 	margin-bottom: 20px;
 }
 
-
+#map img { 
+  max-width: none;
+}
+#map label { 
+  width: auto; display:inline; 
+} 
 
 
 
