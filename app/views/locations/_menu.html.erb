@@ -1,9 +1,9 @@
 <ul class="nav navbar-nav">
 	<% locs = Location.select(:country).map(&:country).uniq.sort_by!{ |char| char.downcase } %>
-	<% locs[0...7].collect do |c| %>
+	<% locs[0...4].collect do |c| %>
 		<li><%= link_to c, "/locations/#{c.downcase}" %> </li>
 	<% end %>
-	<% if locs.count > 7 then %>
+	<% if locs.count > 4 then %>
 		<li><%= link_to "All Countries", locations_path %></li>
 	<% end %>
 </ul>

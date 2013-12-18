@@ -7,13 +7,7 @@ class Event < ActiveRecord::Base
 	validates :title, presence: true
 
 	def self.t_exec_search(coords,query)
-		#get a Twitter connection object
-  		client = Twitter::REST::Client.new do |config| 
-  			config.consumer_key        = "93jNZ8LOHFDlqUs3z5PvEg"; 
-  			config.consumer_secret     = "lRSw2AqT3viPYrqc1wzHP0Rnm7q6euYwkrrldFqW8"; 
-  			config.access_token        = "2190411696-XGq1cUKpN9EVb8bOvEEwDNE0mXkyn872ysEN1t0"; 
-  			config.access_token_secret = "NGNLEwFS9KIylf56sMpZZkeZFZUDfgmHlGesgxgBKtYH3"; 
-  		end
+		client = Event.t_config
 
   		#execute twitter search
   		search = client.search(query, 
@@ -30,5 +24,16 @@ class Event < ActiveRecord::Base
         config.client_secret = "8f0e04bf5a494c73b3134f689540f459"
       end
 	end
+
+  def self.t_config
+    #get a Twitter connection object
+      client = Twitter::REST::Client.new do |config| 
+        config.consumer_key        = "93jNZ8LOHFDlqUs3z5PvEg"; 
+        config.consumer_secret     = "lRSw2AqT3viPYrqc1wzHP0Rnm7q6euYwkrrldFqW8"; 
+        config.access_token        = "2190411696-XGq1cUKpN9EVb8bOvEEwDNE0mXkyn872ysEN1t0"; 
+        config.access_token_secret = "NGNLEwFS9KIylf56sMpZZkeZFZUDfgmHlGesgxgBKtYH3"; 
+      end
+    end
+
 
 end
