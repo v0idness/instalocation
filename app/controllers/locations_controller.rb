@@ -3,22 +3,26 @@ class LocationsController < ApplicationController
 	def index
 		@locs = Location.select(:country).map(&:country).uniq
 		@locs.sort_by!{ |char| char.downcase }
+
 		@ev = Event.all
 		@locations=Location.all
 		@hash = Gmaps4rails.build_markers(@locations) do |location, marker|
   			marker.lat location.latitude
   			marker.lng location.longitude
-  			@x = Event.find(location.id) 
-  			@a="<strong>#{@x.title}</strong>"
-  			@b="#{@x.text}"
-  			@c=""
-  			if @x.photos.first!=nil
-  				@c="<img src=#{@x.photos.first.image} width=\"70\" height=\"70\">"	
-			end
-  			box=[@a, @b, @c].join("\n")
-  			#marker.infowindow @x.text
-  			marker.infowindow box.gsub(/\n/, '<br />')
-  			marker.title @x.title
+  			@x = Event.where(:location_id => location.id)
+  			if @x.count > 0 then
+	  			heading = @x.count > 1 ? "Latest of #{@x.count} events from #{location.name}:" : "One event reported in #{location.name}:"
+	  			photo = ""
+	  			if @x.last.photos.first!=nil
+	  				photo="<img src='#{@x.last.photos.first.thumbnail}' alt='#{@x.last.photos.first.user}' />"	
+				end
+	  			box=[heading, 
+	  				"<strong>#{@x.last.title}</strong>", 
+	  				photo,
+	  				"<a href='/events/#{@x.last.id}'>view this event &raquo;</a>"].join("\n")
+	  			marker.infowindow box.gsub(/\n/, '<br />')
+	  			marker.title @x.last.title
+	  		end
   		end
 	end
 

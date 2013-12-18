@@ -4,6 +4,22 @@ class EventsController < ApplicationController
 	def index
     #Get the events from the model; order by 'date' descending
     @events = Event.order("date desc")    
+    
+    @ev = Event.all
+    @locations=Location.all
+    @hash = Gmaps4rails.build_markers(@locations) do |location, marker|
+      marker.lat location.latitude
+      marker.lng location.longitude
+      @x = Event.where(:location_id => location.id)
+      if @x.count > 0 then
+        heading = @x.count > 1 ? "Latest of #{@x.count} events from #{location.name}:" : "One event reported in #{location.name}:"
+        box=[heading, 
+          "<strong>#{@x.last.title}</strong>",
+          "<a href='/events/#{@x.last.id}'>view this event &raquo;</a>"].join("\n")
+        marker.infowindow box.gsub(/\n/, '<br />')
+        marker.title @x.last.title
+      end
+    end
 	end
 
 	def new
@@ -74,9 +90,6 @@ class EventsController < ApplicationController
     country = regm[3] # country of the location
     locname = regm[4] # name of the chosen location
 
-    puts params[:evnt]
-    puts regm
-
     re = /([\-\.\d]*),([\-\.\d]*)/ 
     regm = coords.match re
     lat = regm[1]
@@ -129,6 +142,7 @@ class EventsController < ApplicationController
             #:caption => item.caption.nil ? "" : item.caption.text,
             :thumbnail => item.images.thumbnail.url,
             :image => item.images.standard_resolution.url,
+            :link => item.link,
             :event_id => @event.id            
             })
         end

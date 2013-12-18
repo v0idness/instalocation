@@ -5,11 +5,17 @@ Detected <%= pluralize(@evnt_a.count, "possible event") %> near <%= @coord[0].ad
 
 <%= form_tag(controller: :events, action: :create)  do%>
 <h2>Events</h2>
-From the events that we have discovered nearby, <strong>please select the one you know something about</strong> based on the content of the tweets!
+From the nearby locations where activity has been discovered, <strong>please select the one you know something about</strong> based on the content of the tweets!
 
 <div class="row">
 <% @evnt_a.each do |g| %>
+<% if @evnt_a.count == 1 then %>
+<div class="col-lg-12">
+<% elsif @evnt_a.count == 2 then %>
+<div class="col-lg-6">
+<% else %>
 <div class="col-lg-4">
+<% end %>
 <span class="input-group-addon">
 <%= radio_button_tag(:evnt, "#{@query},#{@coord[0].latitude},#{@coord[0].longitude} #{g.first.place.country};#{g.first.place.full_name}") %> <%= g.first.place.full_name %></span><br /> 
   There have been <%= pluralize(g.count, "tweet") %> from <%= g.first.place.name %>:
