@@ -42,7 +42,9 @@ class CommentsController < ApplicationController
   def create
     @event = Event.find(params[:event_id])
     @comment = @event.comments.create!(params[:comment])
+    if current_user
     @comment.user_id=current_user.id
+    end 
     @comment.event_id=@event.id
     @comment.save  
     redirect_to @event
