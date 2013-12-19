@@ -1,4 +1,6 @@
-<% @events.each do |event| %> 
+<% @events.each_slice(3) do |ev_group| %>
+<div class="row">
+  <% ev_group.each do |event| %> 
 <div class="col-lg-4">
   <h2><%= link_to event.title, event %></h2>
   <span class="event_date">Reported on <%= event.date.strftime("%d %b %Y") %> @ <%= Location.find(event.location_id).name %>. Reported by <% if !event.user_id.nil? then %>
@@ -21,5 +23,7 @@
      </div>
    </p>
    <p><%= link_to "View details &raquo;".html_safe, event, :class => "btn btn-default" %> </p>
+ </div>
+ <% end %>
  </div>
  <% end %>

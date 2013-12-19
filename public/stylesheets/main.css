@@ -54,10 +54,12 @@
   max-width: none;
 }
 #map label { 
-  width: auto; display:inline; 
+  width: auto; 
+  display:inline; 
 } 
 
 .query {
 	font-weight:bold;
-	color:#111;
+	color: #f8f8f8;
+	background: #3278b3;
 }

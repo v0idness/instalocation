@@ -1,5 +1,5 @@
 <h1>Add Event</h1>
-Retrieved <%= pluralize(@tweets.count, "tweet") %> near <%= @coord[0].address %>.<br/>
+Retrieved <%= pluralize(@tweets.count, "tweet") %><% if !@query.blank? %> about "<%= @query %>"<% end %> near <%= @coord[0].address %>.<br/>
 
 <% if @tweets.count < 1 then %>
 <%= link_to 'Try again', new_event_path %>
@@ -8,7 +8,7 @@ Retrieved <%= pluralize(@tweets.count, "tweet") %> near <%= @coord[0].address %>
 
 <%= form_tag(controller: :events, action: :create)  do %>
 <h2>Tweets</h2>
-These are tweets that were recently posted nearby<% if !@query.blank? %> about <%= @query %><% end %>. Please <strong>select those that contain information about the event!</strong>
+These are tweets that were recently posted nearby<% if !@query.blank? %> about "<%= @query %>"<% end %>. Please <strong>select those that contain information about the event!</strong>
 
 <div class="row">
 <% if @tweets.count <= 40 then %>
