@@ -11,6 +11,7 @@
    <%= @event.text %>
    </p>
 
+   <% if @event.tweets.count > 0 then %>
    <p>
    <h3>Tweets</h3>
    <div style="overflow:auto; max-height: 300px;">
@@ -19,7 +20,9 @@
    	<% end %>
       </div>
    	</p>
+    <% end %>
 
+    <% if @event.photos.count > 0 then %>
    	<p>
    	<h3><span class="glyphicon glyphicon-camera"></span> Photos</h3>
    	<% @event.photos.each do |p| %>
@@ -32,6 +35,7 @@
       <% end %>
     <% end %>
    </p>
+   <% end %>
 
    <h2>Comments</h2>
    <div id="comments">
