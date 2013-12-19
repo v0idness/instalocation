@@ -34,5 +34,6 @@ class LocationsController < ApplicationController
 				@events << e
 			end
 		end
+		@events.reverse!
 	end
 end
