@@ -37,7 +37,7 @@
         <div class="navbar-form navbar-right">
          <% if user_signed_in? %>
          Signed in as <%= current_user.email %> 
-         <% if current_user.level < 3 and current_user.level > 0 then %> <%= image_tag("badge_bronze_l.png", alt: "Bronze reporter badge") %>
+         <% if current_user.level < 3 and current_user.level >= 0 then %> <%= image_tag("badge_bronze_l.png", alt: "Bronze reporter badge") %>
          <% elsif current_user.level < 10 then %> <%= image_tag("badge_silver_l.png", alt: "Silver reporter badge") %>
          <% elsif current_user.level >=10 %> <%= image_tag("badge_gold_l.png", alt: "Gold reporter badge") %> <% end %> 
          <%= link_to "Sign out", destroy_user_session_path, :method => :delete, :class => "btn btn-danger" %>
